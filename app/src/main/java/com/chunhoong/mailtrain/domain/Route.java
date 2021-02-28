@@ -9,7 +9,7 @@ public class Route {
 
     private String name;
     private String stationName;
-    private String anotherStationName;
+    private String adjacentStationName;
     private BigInteger duration;
 
     public static Route fromInput(String input) {
@@ -17,7 +17,7 @@ public class Route {
         Route instance = new Route();
         instance.setName(commaSeparatedValues[0]);
         instance.setStationName(commaSeparatedValues[1]);
-        instance.setAnotherStationName(commaSeparatedValues[2]);
+        instance.setAdjacentStationName(commaSeparatedValues[2]);
         instance.setDuration(new BigInteger(commaSeparatedValues[3]));
         return instance;
     }

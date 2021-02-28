@@ -1,15 +1,16 @@
 package com.chunhoong.mailtrain.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode
 public class Station {
 
-    private String name;
+    @EqualsAndHashCode.Include
+    private final String name;
 
     public static Station fromInput(String input) {
-        Station instance = new Station();
-        instance.setName(input);
-        return instance;
+        return new Station(input);
     }
 }

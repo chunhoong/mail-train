@@ -1,20 +1,18 @@
 package com.chunhoong.mailtrain;
 
 import com.chunhoong.mailtrain.domain.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
-import java.util.function.Predicate;
+import java.util.*;
+import java.util.function.Supplier;
 
 public class App {
-
+    private static final Logger logger = LoggerFactory.getLogger(App.class);
     private static final Scanner scanner = new Scanner(System.in);
-    private List<Station> stations = new ArrayList<>();
-    private List<Route> routes = new ArrayList<>();
-    private List<Deliverable> deliverables = Collections.synchronizedList(new ArrayList<>());
-    private List<Train> trains = new ArrayList<>();
+    private final TrainMap trainMap = TrainMap.getInstance();
+    private final List<Deliverable> deliverables = Collections.synchronizedList(new ArrayList<>());
+    private final List<Train> trains = new ArrayList<>();
 
     public static void main(String[] args) {
         App instance = new App();
@@ -28,20 +26,20 @@ public class App {
     void setupStations() {
         System.out.print("Number of stations: ");
         int numberOfStation = scanner.nextInt();
-        while (stations.size() < numberOfStation) {
+        while (trainMap.getStations().size() < numberOfStation) {
             System.out.print("Add a station [<stationName>]: ");
             String input = scanner.next();
-            stations.add(Station.fromInput(input));
+            trainMap.addStation(Station.fromInput(input));
         }
     }
 
     void setupRoutes() {
         System.out.print("Number of routes: ");
         int numberOfRoutes = scanner.nextInt();
-        while (routes.size() < numberOfRoutes) {
+        while (trainMap.getRoutes().size() < numberOfRoutes) {
             System.out.print("Add a route [<routeName>,<stationName>,<anotherStationName>,<duration>]: ");
             String input = scanner.next();
-            routes.add(Route.fromInput(input));
+            trainMap.addRoute(Route.fromInput(input));
         }
     }
 
@@ -66,7 +64,17 @@ public class App {
     }
 
     void run() {
+        Supplier<String> randomStation = () -> {
+            Random r = new Random();
+            return String.valueOf((char)(r.nextInt(5) + 'A'));
+        };
 
+        trains.parallelStream().forEach(train -> {
+            Station origin = new Station(randomStation.get());
+            Station destination = new Station(randomStation.get());
+            logger.info("Train {} from {} to {}", train.getName(), origin.getName(), destination.getName());
+            train.travel(origin, destination);
+        });
     }
 
 }
