@@ -16,10 +16,6 @@ public class Train {
     private BigInteger capacity;
     private String startedFrom;
 
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private Navigate navigate = new Navigate();
-
     public static Train fromInput(String input) {
         String[] commaSeparatedValues = input.split(",");
         Train train = new Train();
@@ -30,7 +26,7 @@ public class Train {
     }
 
     public void travel(Station origin, Station destination) {
-        List<Station> route = navigate.apply(origin, destination);
+        List<Station> route = new Navigate().apply(origin, destination);
 
         for (int i = 0; i < route.size(); i++) {
             Station currentStation = route.get(i);
