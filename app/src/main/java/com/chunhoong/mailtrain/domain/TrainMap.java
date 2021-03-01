@@ -35,8 +35,8 @@ public class TrainMap {
                 .findFirst()
                 .orElseThrow();
 
-        adjacentStations.get(station).add(adjacentStation);
-        adjacentStations.get(adjacentStation).add(station);
+        adjacentStations.get(station).add(adjacentStation.withDuration(route.getDuration()));
+        adjacentStations.get(adjacentStation).add(station.withDuration(route.getDuration()));
 
         routes.add(route);
     }

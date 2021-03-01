@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
+
 
 @Data
 public class Train {
@@ -31,7 +33,21 @@ public class Train {
         for (int i = 0; i < route.size(); i++) {
             Station currentStation = route.get(i);
 
-            if (i != route.size() - 1) {
+            Optional.ofNullable(currentStation.getDuration())
+                    .ifPresent(v -> {
+                        int delay = v.multiply(BigInteger.valueOf(300)).intValue();
+                        try {
+                            Thread.sleep(delay);
+                        } catch (InterruptedException e) {
+                            logger.error(e.getMessage(), e);
+                        }
+                    });
+
+            boolean hasArrived = i == route.size() - 1;
+
+            if (hasArrived) {
+                logger.info("n: {}, q: {}", currentStation.getName(), getName());
+            } else {
                 Station nextStation = route.get(i + 1);
                 logger.info(
                         "n: {}, q: {}, moving {}->{}",
@@ -40,8 +56,6 @@ public class Train {
                         currentStation.getName(),
                         nextStation.getName()
                 );
-            } else {
-                logger.info("n: {}, q: {}", currentStation.getName(), getName());
             }
         }
     }

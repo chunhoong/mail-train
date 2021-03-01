@@ -1,14 +1,20 @@
 package com.chunhoong.mailtrain.domain;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
+import java.math.BigInteger;
+
+@With
 @Data
+@AllArgsConstructor
+@RequiredArgsConstructor
 @EqualsAndHashCode
 public class Station {
 
-    @EqualsAndHashCode.Include
     private final String name;
+
+    @EqualsAndHashCode.Exclude
+    private BigInteger duration;
 
     public static Station fromInput(String input) {
         return new Station(input);

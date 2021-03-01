@@ -66,7 +66,7 @@ public class App {
     void run() {
         Supplier<String> randomStation = () -> {
             Random r = new Random();
-            return String.valueOf((char)(r.nextInt(5) + 'A'));
+            return String.valueOf((char) (r.nextInt(5) + 'A'));
         };
 
         trains.parallelStream().forEach(train -> {
