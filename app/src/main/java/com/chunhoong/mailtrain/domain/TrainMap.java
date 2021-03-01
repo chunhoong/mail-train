@@ -1,5 +1,7 @@
 package com.chunhoong.mailtrain.domain;
 
+import lombok.Getter;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,8 +10,14 @@ import java.util.Map;
 public class TrainMap {
 
     private static final TrainMap instance = new TrainMap();
+
+    @Getter
     private final List<Station> stations = new ArrayList<>();
+
+    @Getter
     private final List<Route> routes = new ArrayList<>();
+
+    @Getter
     private final Map<Station, List<Station>> adjacentStations = new HashMap<>();
 
     private TrainMap() {
@@ -39,18 +47,6 @@ public class TrainMap {
         adjacentStations.get(adjacentStation).add(station.withDuration(route.getDuration()));
 
         routes.add(route);
-    }
-
-    public List<Station> getStations() {
-        return stations;
-    }
-
-    public List<Route> getRoutes() {
-        return routes;
-    }
-
-    public Map<Station, List<Station>> getAdjacentStations() {
-        return adjacentStations;
     }
 
 }
