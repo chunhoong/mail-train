@@ -1,17 +1,16 @@
 package com.chunhoong.mailtrain;
 
 import com.chunhoong.mailtrain.domain.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.chunhoong.mailtrain.service.DeliveryService;
 
-import java.util.*;
-import java.util.function.Supplier;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class App {
-    private static final Logger logger = LoggerFactory.getLogger(App.class);
     private static final Scanner scanner = new Scanner(System.in);
     private final TrainMap trainMap = TrainMap.getInstance();
-    private final List<Deliverable> deliverables = Collections.synchronizedList(new ArrayList<>());
+    private final DeliveryService deliveryService = DeliveryService.getInstance();
     private final List<Train> trains = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -46,10 +45,10 @@ public class App {
     void prepareDeliverables() {
         System.out.print("Number of deliveries: ");
         int numberOfDeliveries = scanner.nextInt();
-        while (deliverables.size() < numberOfDeliveries) {
+        while (deliveryService.getDeliverables().size() < numberOfDeliveries) {
             System.out.print("Add a delivery [<packageName>,<sendFrom>,<sendTo>,<weight>]: ");
             String input = scanner.next();
-            deliverables.add(Deliverable.fromInput(input));
+            deliveryService.addDeliverable(Deliverable.fromInput(input));
         }
     }
 
@@ -64,16 +63,10 @@ public class App {
     }
 
     void run() {
-        Supplier<String> randomStation = () -> {
-            Random r = new Random();
-            return String.valueOf((char) (r.nextInt(5) + 'A'));
-        };
-
         trains.parallelStream().forEach(train -> {
-            Station origin = new Station(randomStation.get());
-            Station destination = new Station(randomStation.get());
-            logger.info("Train {} from {} to {}", train.getName(), origin.getName(), destination.getName());
-            train.travel(origin, destination);
+            while (deliveryService.hasDeliverable(train)) {
+                train.performDelivery();
+            }
         });
     }
 

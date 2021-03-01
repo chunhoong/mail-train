@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,15 +16,34 @@ public class Train {
 
     private String name;
     private BigInteger capacity;
-    private String startedFrom;
+    private Station currentStation;
+    private List<Deliverable> deliverables = new ArrayList<>();
 
     public static Train fromInput(String input) {
         String[] commaSeparatedValues = input.split(",");
         Train train = new Train();
         train.setName(commaSeparatedValues[0]);
-        train.setStartedFrom(commaSeparatedValues[1]);
+        train.setCurrentStation(new Station(commaSeparatedValues[1]));
         train.setCapacity(new BigInteger(commaSeparatedValues[2]));
         return train;
+    }
+
+    public void performDelivery() {
+        Deliverable deliverable = deliverables.get(0);
+        travel(currentStation, deliverable.getSendFrom());
+        loadDeliverable();
+        currentStation = deliverable.getSendFrom();
+        travel(currentStation, deliverable.getSendTo());
+        dropDeliverable();
+    }
+
+    void loadDeliverable() {
+        deliverables.get(0).setStatus(DeliveryStatus.IN_DELIVERY);
+    }
+
+    void dropDeliverable() {
+        deliverables.get(0).setStatus(DeliveryStatus.DISPATCHED);
+        deliverables.clear();
     }
 
     public void travel(Station origin, Station destination) {
