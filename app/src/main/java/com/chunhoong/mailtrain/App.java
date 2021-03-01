@@ -2,12 +2,15 @@ package com.chunhoong.mailtrain;
 
 import com.chunhoong.mailtrain.domain.*;
 import com.chunhoong.mailtrain.service.DeliveryService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class App {
+    private static final Logger logger = LoggerFactory.getLogger(App.class);
     private static final Scanner scanner = new Scanner(System.in);
     private final TrainMap trainMap = TrainMap.getInstance();
     private final DeliveryService deliveryService = DeliveryService.getInstance();
@@ -65,6 +68,13 @@ public class App {
     void run() {
         trains.parallelStream().forEach(train -> {
             while (deliveryService.hasDeliverable(train)) {
+                logger.info(
+                        "Train {} delivers {} from {} to {}",
+                        train.getName(),
+                        train.getDeliverables().get(0).getName(),
+                        train.getDeliverables().get(0).getSendFrom().getName(),
+                        train.getDeliverables().get(0).getSendTo().getName()
+                );
                 train.performDelivery();
             }
         });

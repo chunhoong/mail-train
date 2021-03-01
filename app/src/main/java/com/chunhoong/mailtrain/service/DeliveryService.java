@@ -27,7 +27,7 @@ public class DeliveryService {
         deliverables.add(deliverable);
     }
 
-    public boolean hasDeliverable(Train train) {
+    public synchronized boolean hasDeliverable(Train train) {
         Predicate<Deliverable> notBooked = deliverable -> deliverable.getStatus() == DeliveryStatus.NOT_BOOKED;
         Predicate<Deliverable> loadable = deliverable -> deliverable.getWeight().compareTo(train.getCapacity()) <= 0;
 
