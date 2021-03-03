@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
 
 public class App {
     private static final Logger logger = LoggerFactory.getLogger(App.class);
@@ -16,7 +18,7 @@ public class App {
     private final DeliveryService deliveryService = DeliveryService.getInstance();
     private final List<Train> trains = new ArrayList<>();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
         App instance = new App();
         instance.setupStations();
         instance.setupRoutes();
@@ -65,8 +67,9 @@ public class App {
         }
     }
 
-    void run() {
-        trains.parallelStream().forEach(train -> {
+    void run() throws ExecutionException, InterruptedException {
+        ForkJoinPool deliveryProcessPool = new ForkJoinPool(trains.size());
+        deliveryProcessPool.submit(() -> trains.parallelStream().forEach(train -> {
             while (deliveryService.hasDeliverable(train)) {
                 logger.info(
                         "Train {} delivers {} from {} to {}",
@@ -77,7 +80,7 @@ public class App {
                 );
                 train.performDelivery();
             }
-        });
+        })).get();
     }
 
 }
