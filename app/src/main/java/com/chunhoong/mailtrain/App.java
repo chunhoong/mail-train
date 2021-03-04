@@ -73,7 +73,7 @@ public class App {
         ForkJoinPool deliveryProcessPool = new ForkJoinPool(trains.size());
         deliveryProcessPool.submit(() -> trains.parallelStream().forEach(train -> {
             while (deliveryService.hasDeliverable(train)) {
-                logger.info(
+                logger.debug(
                         "Train {} delivers {} from {} to {}",
                         train.getName(),
                         train.getDeliverables().get(0).getName(),
