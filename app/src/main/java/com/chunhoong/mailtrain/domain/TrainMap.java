@@ -15,9 +15,6 @@ public class TrainMap {
     private final List<Station> stations = new ArrayList<>();
 
     @Getter
-    private final List<Route> routes = new ArrayList<>();
-
-    @Getter
     private final Map<Station, List<Station>> adjacentStations = new HashMap<>();
 
     private TrainMap() {
@@ -43,10 +40,14 @@ public class TrainMap {
                 .findFirst()
                 .orElseThrow();
 
-        adjacentStations.get(station).add(adjacentStation.withDuration(route.getDuration()));
-        adjacentStations.get(adjacentStation).add(station.withDuration(route.getDuration()));
-
-        routes.add(route);
+        adjacentStations.get(station).add(adjacentStation
+                .withDuration(route.getDuration())
+                .withRouteName(route.getName())
+        );
+        adjacentStations.get(adjacentStation).add(station
+                .withDuration(route.getDuration())
+                .withRouteName(route.getName())
+        );
     }
 
 }

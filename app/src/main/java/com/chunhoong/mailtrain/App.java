@@ -40,10 +40,12 @@ public class App {
     void setupRoutes() {
         System.out.print("Number of routes: ");
         int numberOfRoutes = scanner.nextInt();
-        while (trainMap.getRoutes().size() < numberOfRoutes) {
+        int counter = 0;
+        while (counter < numberOfRoutes) {
             System.out.print("Add a route [<routeName>,<stationName>,<anotherStationName>,<duration>]: ");
             String input = scanner.next();
             trainMap.addRoute(Route.fromInput(input));
+            counter++;
         }
     }
 

@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 public class Train {
 
     private static final String LOGGING_TEMPLATE_PRE_ARRIVAL = "@{}, n =  {}, q = {}, load = { {} }, drop = { {} }, " +
-            "moving {}->{}" +
+            "moving {}->{}:{}" +
             " arr {}";
     private static final String LOGGING_TEMPLATE_ARRIVAL = "@{}, n =  {}, q = {}, load = { {} }, drop = { {} }";
     private static Logger logger = LoggerFactory.getLogger(Train.class);
@@ -85,6 +85,7 @@ public class Train {
                 "",
                 currentStation.getName(),
                 nextStation.getName(),
+                nextStation.getRouteName(),
                 time.get()
         );
 
@@ -106,6 +107,7 @@ public class Train {
                 "",
                 currentStation.getName(),
                 nextStation.getName(),
+                nextStation.getRouteName(),
                 time.get()
         );
 
@@ -116,6 +118,7 @@ public class Train {
                 Consumer<Station> onArrival,
                 BiConsumer<Station, Station> onPassThrough) {
         if (origin.equals(destination)) {
+            logger.warn("Travel does not happen as origin and destination is the same");
             return;
         }
 
