@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.BiFunction;
 
-public class Navigate implements BiFunction<Station, Station, List<Station>> {
+public class Navigation implements BiFunction<Station, Station, List<Station>> {
 
     private List<Station> route = new ArrayList<>();
     private final TrainMap trainMap = TrainMap.getInstance();

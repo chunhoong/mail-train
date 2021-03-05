@@ -122,7 +122,7 @@ public class Train {
             return;
         }
 
-        List<Station> route = new Navigate().apply(origin, destination);
+        List<Station> route = new Navigation().apply(origin, destination);
 
         for (int i = 0; i < route.size(); i++) {
             Station currentStation = route.get(i);
