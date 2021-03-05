@@ -12,6 +12,7 @@ public class Route {
     private String adjacentStationName;
     private BigInteger duration;
 
+    // TODO: Extract to other layer as domain should not be aware of user input
     public static Route fromInput(String input) {
         String[] commaSeparatedValues = input.split(",");
         Route instance = new Route();
