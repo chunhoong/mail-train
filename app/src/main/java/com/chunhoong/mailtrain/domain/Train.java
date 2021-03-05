@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+// TODO: Delegate logging to another service and perform logging using pub-sub.
 @Data
 public class Train {
 
@@ -25,6 +26,7 @@ public class Train {
     private List<Deliverable> deliverables = new ArrayList<>();
     private AtomicReference<BigInteger> time = new AtomicReference<>(BigInteger.ZERO);
 
+    // TODO: Extract to other layer as domain should not be aware of user input
     public static Train fromInput(String input) {
         String[] commaSeparatedValues = input.split(",");
         Train train = new Train();
